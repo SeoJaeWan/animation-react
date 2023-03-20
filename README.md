@@ -2,6 +2,8 @@
 
 Fade, Text 애니메이션을 React에서 사용할 수 있게 구현한 라이브러리입니다.
 
+<a href="https://seojaewan.github.io/animation-react/" target="_blank">Demo</a>
+
 ## Install
 
 ```bash

@@ -49,6 +49,10 @@ var Fade = function Fade(_ref) {
     _useState2 = _slicedToArray(_useState, 2),
     isActive = _useState2[0],
     setIsActive = _useState2[1];
+  var _useState3 = (0, _react.useState)(false),
+    _useState4 = _slicedToArray(_useState3, 2),
+    isFirst = _useState4[0],
+    setIsFirst = _useState4[1];
   (0, _useObserver.default)({
     target: fadeRef,
     onIntersect: function onIntersect(_ref2) {
@@ -56,13 +60,20 @@ var Fade = function Fade(_ref) {
         entry = _ref3[0];
       if (entry.isIntersecting) {
         setTimeout(function () {
-          setIsActive(true);
+          setIsActive(entry.isIntersecting);
         }, [delay * 1000]);
-      } else if (isRepeat) {
+      } else {
         setIsActive(false);
       }
     }
   });
+  (0, _react.useEffect)(function () {
+    if (isActive && !isRepeat) {
+      setIsFirst(true);
+    } else if (isRepeat) {
+      setIsFirst(false);
+    }
+  }, [isActive, isRepeat]);
   var transform = {
     opacity: "",
     top: "translateY(-".concat(translate, ")"),
@@ -78,7 +89,7 @@ var Fade = function Fade(_ref) {
     className: "aniation_container",
     children: [/*#__PURE__*/(0, _jsxRuntime.jsx)("div", {
       className: "animation_fade",
-      style: isActive ? _objectSpread({}, activeStyle) : {
+      style: isActive || isFirst ? _objectSpread({}, activeStyle) : {
         transform: transform[type],
         transition: "transform ".concat(duration, "s, opacity ").concat(duration, "s")
       },

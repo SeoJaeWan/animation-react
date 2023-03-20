@@ -147,9 +147,13 @@ var Text = function Text(_ref6) {
     _useState4 = _slicedToArray(_useState3, 2),
     isActive = _useState4[0],
     setIsActive = _useState4[1];
-  var underlineEvent = function underlineEvent(isActive) {
+  var _useState5 = (0, _react.useState)(false),
+    _useState6 = _slicedToArray(_useState5, 2),
+    isFirst = _useState6[0],
+    setIsFirst = _useState6[1];
+  var underlineEvent = function underlineEvent() {
     var underline = underlineRef.current;
-    if (isActive) {
+    if (isActive || isFirst) {
       var style = Object.keys(option).map(function (key) {
         return "".concat(key, ": ").concat(option[key], ";");
       });
@@ -174,10 +178,20 @@ var Text = function Text(_ref6) {
     }
   });
   (0, _react.useEffect)(function () {
+    var underline = underlineRef.current;
     if (type === "underline") {
-      underlineEvent(isActive);
+      underlineEvent();
+    } else {
+      underline.style = "width: 0;";
     }
-  }, [isActive]);
+  }, [isActive, isFirst]);
+  (0, _react.useEffect)(function () {
+    if (isActive && !isRepeat) {
+      setIsFirst(true);
+    } else if (isRepeat) {
+      setIsFirst(false);
+    }
+  }, [isActive, isRepeat]);
   return /*#__PURE__*/(0, _jsxRuntime.jsxs)("span", {
     className: "animation_text",
     ref: textRef,
@@ -189,7 +203,7 @@ var Text = function Text(_ref6) {
         idx: idx,
         type: type,
         option: option,
-        isActive: isActive,
+        isActive: isActive || isFirst,
         wordAnimate: wordAnimate[type]({
           duration: duration,
           idx: idx
