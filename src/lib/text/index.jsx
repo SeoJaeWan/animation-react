@@ -103,11 +103,12 @@ const Text = ({
   const textRef = useRef();
   const underlineRef = useRef();
   const [isActive, setIsActive] = useState(false);
+  const [isFirst, setIsFirst] = useState(false);
 
-  const underlineEvent = (isActive) => {
+  const underlineEvent = () => {
     const underline = underlineRef.current;
 
-    if (isActive) {
+    if (isActive || isFirst) {
       const style = Object.keys(option).map((key) => `${key}: ${option[key]};`);
       style.push(`width: 100%; transition: width ${duration}s`);
       underline.style = style.join("");
@@ -130,10 +131,22 @@ const Text = ({
   });
 
   useEffect(() => {
+    const underline = underlineRef.current;
+
     if (type === "underline") {
-      underlineEvent(isActive);
+      underlineEvent();
+    } else {
+      underline.style = "width: 0;";
     }
-  }, [isActive]);
+  }, [isActive, isFirst]);
+
+  useEffect(() => {
+    if (isActive && !isRepeat) {
+      setIsFirst(true);
+    } else if (isRepeat) {
+      setIsFirst(false);
+    }
+  }, [isActive, isRepeat]);
 
   return (
     <span className="animation_text" ref={textRef}>
@@ -149,7 +162,7 @@ const Text = ({
               idx={idx}
               type={type}
               option={option}
-              isActive={isActive}
+              isActive={isActive || isFirst}
               wordAnimate={wordAnimate[type]({ duration, idx })}
               defaultStyle={defaultStyle[type]({ option })}
             />

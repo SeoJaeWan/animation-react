@@ -62,12 +62,12 @@ isRepeat : 반복 설정 ( default : false )
 option : 이벤트 옵션 ( default : {} )
 
 ```jsx live
-         option as underLine : {
-            background: "red",
-            height: "10px",
-         }
+option as underLine : {
+background: "red",
+height: "10px",
+}
 
-         option as slide : {
-            translate: "translateX(100px)"
-         }
+option as slide : {
+translate: "translateX(100px)"
+}
 ```

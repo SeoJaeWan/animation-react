@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useObserver from "../hooks/useObserver";
 import "./Style.css";
 
@@ -24,19 +24,28 @@ const Fade = ({
 }) => {
   const fadeRef = useRef();
   const [isActive, setIsActive] = useState(false);
+  const [isFirst, setIsFirst] = useState(false);
 
   useObserver({
     target: fadeRef,
     onIntersect: ([entry]) => {
       if (entry.isIntersecting) {
         setTimeout(() => {
-          setIsActive(true);
+          setIsActive(entry.isIntersecting);
         }, [delay * 1000]);
-      } else if (isRepeat) {
+      } else {
         setIsActive(false);
       }
     },
   });
+
+  useEffect(() => {
+    if (isActive && !isRepeat) {
+      setIsFirst(true);
+    } else if (isRepeat) {
+      setIsFirst(false);
+    }
+  }, [isActive, isRepeat]);
 
   const transform = {
     opacity: "",
@@ -56,7 +65,7 @@ const Fade = ({
       <div
         className="animation_fade"
         style={
-          isActive
+          isActive || isFirst
             ? { ...activeStyle }
             : {
                 transform: transform[type],
